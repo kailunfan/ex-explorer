@@ -87,7 +87,7 @@
 				},
 				"ex-explorer.ignorePattern": {
 					"type": "array",
-					"description": "File / Folder Ignore Patterns ( Sample - .*bat , .*.jar , .*temp.* )",
+					"description": "File / Folder Ignore Patterns ( Sample - .*bat , .*.jar$ , .*temp.* )",
 					"items": {
 						"type": "string"
 					}

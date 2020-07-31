@@ -1,4 +1,4 @@
-# ex-explorer README
+# ex-explorer
 
 An Extra Explorer for VS Code
 

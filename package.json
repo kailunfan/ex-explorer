@@ -10,9 +10,9 @@
 	},
 	"repository": {
 		"type": "git",
-		"url": "https://gitlab.com/safa.acid/acid-gitlab-mr"
+		"url": "https://github.com/acid-srvnn/ex-explorer"
 	},
-	"icon": "resources/icons/light/icon.svg",
+	"icon": "resources/icons/light/icon.png",
 	"engines": {
 		"vscode": "^1.40.0"
 	},

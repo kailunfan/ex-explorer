@@ -2,7 +2,7 @@
 	"name": "ex-explorer",
 	"displayName": "ex-explorer",
 	"description": "An Extra Explorer",
-	"version": "0.0.1",
+	"version": "0.2.0",
 	"publisher": "acid-srvnn",
 	"author": {
 		"name": "acid-srvnn",
@@ -83,7 +83,7 @@
 				"ex-explorer.path": {
 					"type": "array",
 					"description": "Explorer Path ( Sample - D:/temp , ${WorkspaceName}/temp )",
-					"items" : {
+					"items": {
 						"type": "string"
 					}
 				},
@@ -95,32 +95,32 @@
 					}
 				},
 				"ex-explorer.postOpenActions": {
-					"type":"array",
+					"type": "array",
 					"items": {
-						"type":"object",
+						"type": "object",
 						"properties": {
-							"filePattern" : {
-								"type" : "string"
+							"filePattern": {
+								"type": "string"
 							},
-							"toggleWordWrap" : {
-								"type" : "boolean"
+							"toggleWordWrap": {
+								"type": "boolean"
 							},
-							"scrollToBottom" : {
-								"type" : "boolean"
+							"scrollToBottom": {
+								"type": "boolean"
 							},
-							"decorations" : {
-								"type":"array",
+							"decorations": {
+								"type": "array",
 								"items": {
-									"type":"object",
+									"type": "object",
 									"properties": {
-										"regex" : {
-											"type":"string"											
+										"regex": {
+											"type": "string"
 										},
 										"backgroundColor": {
-											"type" : "string"
+											"type": "string"
 										},
 										"color": {
-											"type" : "string"
+											"type": "string"
 										}
 									}
 								}

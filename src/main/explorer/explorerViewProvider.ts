@@ -14,23 +14,42 @@ export class ExplorerViewProvider implements vscode.TreeDataProvider<vscode.Tree
     }
     getChildren(element?: any): vscode.ProviderResult<any[]> {
         if (!element) {
-            return this.listChildren(Config.get_conf_path());
+            let retArr: Array<ExplorerFolderItem | ExplorerFileItem> = [];
+            Config.get_conf_path().forEach(item => {
+                retArr.push(new ExplorerFolderItem(item, item, vscode.TreeItemCollapsibleState.Expanded));
+            });
+            return retArr;
         } else {
             return this.listChildren(element.fullpath);
         }
     }
     listChildren(fullpath: string): Promise<Array<ExplorerFolderItem | ExplorerFileItem>> {
         return new Promise(async (resolve, reject) => {
-            let retArr: Array<ExplorerFolderItem | ExplorerFileItem> = []
+            let retArr: Array<ExplorerFolderItem | ExplorerFileItem> = [];
             try {
-                fs.readdirSync(fullpath).forEach((file) => {
+                let files = fs.readdirSync(fullpath);
+
+                files.sort(function(a, b) {
+
+                    if (fs.lstatSync( fullpath + "/" + a).isDirectory() && !fs.lstatSync( fullpath + "/" + b).isDirectory()) {
+                        return 100;
+                    }else if (!fs.lstatSync( fullpath + "/" + a).isDirectory() && fs.lstatSync( fullpath + "/" + b).isDirectory()) {
+                        return -100;
+                    } else{
+                        return fs.statSync( fullpath + "/" + b).mtime.getTime() - 
+                        fs.statSync( fullpath + "/" + a).mtime.getTime();
+                    }             
+
+                });
+                
+                files.forEach((file) => {
 
                     let newpath = fullpath + "/" + file;
 
                     if(this.checkIgnoreRegex(newpath)){
 
                         if (fs.lstatSync(newpath).isDirectory()) {
-                            retArr.push(new ExplorerFolderItem(file, newpath));
+                            retArr.push(new ExplorerFolderItem(file, newpath,vscode.TreeItemCollapsibleState.Collapsed));
                         } else {
                             retArr.push(new ExplorerFileItem(file, newpath));
                         }

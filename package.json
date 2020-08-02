@@ -81,15 +81,51 @@
 			"title": "ex-explorer",
 			"properties": {
 				"ex-explorer.path": {
-					"type": "string",
-					"default": ".",
-					"description": "Explorer Path ( Sample - D:/temp , ${WorkspaceName}/temp )"
+					"type": "array",
+					"description": "Explorer Path ( Sample - D:/temp , ${WorkspaceName}/temp )",
+					"items" : {
+						"type": "string"
+					}
 				},
 				"ex-explorer.ignorePattern": {
 					"type": "array",
 					"description": "File / Folder Ignore Patterns ( Sample - .*bat , .*.jar$ , .*temp.* )",
 					"items": {
 						"type": "string"
+					}
+				},
+				"ex-explorer.postOpenActions": {
+					"type":"array",
+					"items": {
+						"type":"object",
+						"properties": {
+							"filePattern" : {
+								"type" : "string"
+							},
+							"toggleWordWrap" : {
+								"type" : "boolean"
+							},
+							"scrollToBottom" : {
+								"type" : "boolean"
+							},
+							"decorations" : {
+								"type":"array",
+								"items": {
+									"type":"object",
+									"properties": {
+										"regex" : {
+											"type":"string"											
+										},
+										"backgroundColor": {
+											"type" : "string"
+										},
+										"color": {
+											"type" : "string"
+										}
+									}
+								}
+							}
+						}
 					}
 				}
 			}

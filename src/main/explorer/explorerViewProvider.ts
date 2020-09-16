@@ -16,7 +16,9 @@ export class ExplorerViewProvider implements vscode.TreeDataProvider<vscode.Tree
         if (!element) {
             let retArr: Array<ExplorerFolderItem | ExplorerFileItem> = [];
             Config.get_conf_path().forEach(item => {
-                retArr.push(new ExplorerFolderItem(item, item, vscode.TreeItemCollapsibleState.Expanded));
+                let fullpath = item;
+                let name = item.replace(/.*(\\|\/)/,"");
+                retArr.push(new ExplorerFolderItem(name, fullpath, vscode.TreeItemCollapsibleState.Expanded));
             });
             return retArr;
         } else {

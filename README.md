@@ -2,9 +2,7 @@
 
 An Extra Explorer for VS Code
 
+* Highly lightweight
+* Only minimal and most required features to be added
+* Doesnt AutoRefresh
 * I use it personally for listing log files in separate explorer
-
-TODO
-
-* Add formatting options for easier log viewing
-* Auto refresh list

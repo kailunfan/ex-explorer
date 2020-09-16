@@ -18,6 +18,7 @@ export class ExplorerFileItem extends vscode.TreeItem {
     ) {
         super(label, vscode.TreeItemCollapsibleState.None);
         this.resourceUri = vscode.Uri.parse("file://" + fullpath);
+        this.tooltip = fullpath;
     }
 
     contextValue = 'ExplorerFileItem';

@@ -1,7 +1,8 @@
 import * as vscode from 'vscode';
 import { Config } from '../config';
 import { ViewProviders } from '../viewProviders';
-import { ThemeColor } from 'vscode';
+import { ThemeColor, Uri } from 'vscode';
+import * as rimraf from 'rimraf';
 
 export class ExplorerHandler {
 
@@ -44,6 +45,21 @@ export class ExplorerHandler {
             vscode.commands.executeCommand('workbench.action.openSettings', 'ex-explorer');
         }));
 
+        context.subscriptions.push(vscode.commands.registerCommand('ex-explorer.deletefile', async (args) => {
+            Config.logger.log('Deleting file ' + args.fullpath);
+            rimraf.sync(args.fullpath);
+            ViewProviders.explorerViewProvider.refreshUI();
+        }));
+
+        context.subscriptions.push(vscode.commands.registerCommand('ex-explorer.deletefolder', async (args) => {
+            Config.logger.log('Deleting folder ' + args.fullpath);
+            rimraf.sync(args.fullpath);
+            ViewProviders.explorerViewProvider.refreshUI();
+        }));
+
+        context.subscriptions.push(vscode.commands.registerCommand('ex-explorer.revealinexplorer', async (args) => {
+            vscode.commands.executeCommand('revealFileInOS', Uri.file(args.fullpath));
+        }));
     }
 
     static applyDecorations(editor: vscode.TextEditor, regex: string, decorationType: vscode.TextEditorDecorationType) {

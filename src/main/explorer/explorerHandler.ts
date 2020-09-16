@@ -58,7 +58,12 @@ export class ExplorerHandler {
         }));
 
         context.subscriptions.push(vscode.commands.registerCommand('ex-explorer.revealinexplorer', async (args) => {
-            vscode.commands.executeCommand('revealFileInOS', Uri.file(args.fullpath));
+            let fullpath = args.fullpath;
+            fullpath = fullpath.replace(/(\\|\/)[^\\\/]*?(\\|\/)\.\./,"");
+            fullpath = fullpath.replace(/(\\|\/)[^\\\/]*?(\\|\/)\.\./,"");
+            fullpath = fullpath.replace(/(\\|\/)[^\\\/]*?(\\|\/)\.\./,"");
+            Config.logger.log('Revealing folder ' + args.fullpath + " :: " + fullpath);
+            vscode.commands.executeCommand('revealFileInOS', Uri.file(fullpath));
         }));
     }
 

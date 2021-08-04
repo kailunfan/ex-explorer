@@ -1,18 +1,17 @@
 {
-	"name": "ex-explorer",
-	"displayName": "ex-explorer",
+	"name": "extra-explorer",
+	"displayName": "ExtraExplorer",
 	"description": "An Extra Explorer",
-	"version": "0.2.2",
-	"publisher": "acid-srvnn",
+	"version": "0.0.1",
+	"publisher": "hookbear",
 	"author": {
-		"name": "acid-srvnn",
-		"email": "safa.acid@gmail.com"
+		"name": "hookbear"
 	},
 	"repository": {
 		"type": "git",
-		"url": "https://github.com/acid-srvnn/ex-explorer"
+		"url": "https://github.com/kailunfan/ex-explorer"
 	},
-	"icon": "resources/icons/light/icon.png",
+	"icon": "resources/icons/file-code.png",
 	"engines": {
 		"vscode": "^1.40.0"
 	},
@@ -40,6 +39,26 @@
 			{
 				"command": "ex-explorer.revealinexplorer",
 				"title": "Reveal in explorer"
+			},
+			{
+				"command": "ex-explorer.addfile",
+				"title": "Add File",
+				"icon": {
+					"dark": "resources/icons/dark/add.svg",
+					"light": "resources/icons/light/add.svg"
+				}
+			},
+			{
+				"command": "ex-explorer.addfolder",
+				"title": "Add Folder",
+				"icon": {
+					"dark": "resources/icons/dark/add-folder.svg",
+					"light": "resources/icons/light/add-folder.svg"
+				}
+			},
+			{
+				"command": "ex-explorer.renamefile",
+				"title": "Rename File"
 			},
 			{
 				"command": "ex-explorer.refreshConfig",
@@ -71,6 +90,7 @@
 					"group": "navigation"
 				}
 			],
+			"commandPalette": [],
 			"view/item/context": [
 				{
 					"command": "ex-explorer.deletefile",
@@ -83,6 +103,11 @@
 					"group": "navigation"
 				},
 				{
+					"command": "ex-explorer.renamefile",
+					"when": "view == ex-explorer-explorer && viewItem == ExplorerFileItem",
+					"group": "navigation"
+				},
+				{
 					"command": "ex-explorer.revealinexplorer",
 					"when": "view == ex-explorer-explorer && viewItem == ExplorerFileItem",
 					"group": "navigation"
@@ -91,6 +116,16 @@
 					"command": "ex-explorer.revealinexplorer",
 					"when": "view == ex-explorer-explorer && viewItem == ExplorerFolderItem",
 					"group": "navigation"
+				},
+				{
+					"command": "ex-explorer.addfile",
+					"when": "view == ex-explorer-explorer && viewItem != ExplorerFileItem",
+					"group": "inline"
+				},
+				{
+					"command": "ex-explorer.addfolder",
+					"when": "view == ex-explorer-explorer && viewItem != ExplorerFileItem",
+					"group": "inline"
 				}
 			]
 		},
@@ -99,7 +134,7 @@
 				{
 					"id": "ex-explorer-container",
 					"title": "ex-explorer",
-					"icon": "resources/icons/light/log-file.svg"
+					"icon": "resources/icons/light/file-code-regular.svg"
 				}
 			]
 		},

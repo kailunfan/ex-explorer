@@ -13,6 +13,5 @@ export class ViewProviders {
         ViewProviders.explorerView = vscode.window.createTreeView('ex-explorer-explorer', {
             treeDataProvider: ViewProviders.explorerViewProvider
         });
-
     }
 }

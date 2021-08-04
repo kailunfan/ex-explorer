@@ -1,30 +1,33 @@
 import * as vscode from 'vscode';
 import { Config } from '../config';
 import { ViewProviders } from '../viewProviders';
-import { ThemeColor, Uri } from 'vscode';
+import { Uri, window } from 'vscode';
 import * as rimraf from 'rimraf';
+import * as fs from 'fs';
+import * as path from 'path';
+import { ExplorerFileItem } from './explorerFileItem';
 
 export class ExplorerHandler {
 
 
     static setCommands(context: vscode.ExtensionContext) {
 
-        context.subscriptions.push(vscode.commands.registerCommand('ex-explorer.openfile', async (args) => {
-            let uri = vscode.Uri.parse("file:" + args.fullpath);
+        const open_file = async (args: string) => {
+            let uri = vscode.Uri.parse("file:" + args);
             Config.logger.log('Opening url ' + uri);
             let doc = await vscode.workspace.openTextDocument(uri);
             let editor = await vscode.window.showTextDocument(doc);
 
-            for(var i=0;i<Config.get_conf_post_open_actions().length;i++){
+            for (var i = 0; i < Config.get_conf_post_open_actions().length; i++) {
                 let action = Config.get_conf_post_open_actions()[i];
-                if(new RegExp(action.filePattern).test(uri.fsPath)){
-                    if(action.toggleWordWrap){
+                if (new RegExp(action.filePattern).test(uri.fsPath)) {
+                    if (action.toggleWordWrap) {
                         await vscode.commands.executeCommand('editor.action.toggleWordWrap');
                     }
-                    if(action.scrollToBottom){
+                    if (action.scrollToBottom) {
                         await editor.revealRange(new vscode.Range(new vscode.Position(editor.document.lineCount - 2, 0), new vscode.Position(editor.document.lineCount - 1, 0)));
                     }
-                    for(var j=0;j<action.decorations.length;j++){
+                    for (var j = 0; j < action.decorations.length; j++) {
                         let decorationType = vscode.window.createTextEditorDecorationType({
                             color: action.decorations[j].color,
                             backgroundColor: action.decorations[j].backgroundColor
@@ -34,6 +37,10 @@ export class ExplorerHandler {
                     }
                 }
             }
+        };
+
+        context.subscriptions.push(vscode.commands.registerCommand('ex-explorer.openfile', async (item: ExplorerFileItem) => {
+            await open_file(item.fullpath);
         }));
 
         context.subscriptions.push(vscode.commands.registerCommand('ex-explorer.refreshConfig', async () => {
@@ -59,11 +66,43 @@ export class ExplorerHandler {
 
         context.subscriptions.push(vscode.commands.registerCommand('ex-explorer.revealinexplorer', async (args) => {
             let fullpath = args.fullpath;
-            fullpath = fullpath.replace(/(\\|\/)[^\\\/]*?(\\|\/)\.\./,"");
-            fullpath = fullpath.replace(/(\\|\/)[^\\\/]*?(\\|\/)\.\./,"");
-            fullpath = fullpath.replace(/(\\|\/)[^\\\/]*?(\\|\/)\.\./,"");
+            fullpath = fullpath.replace(/(\\|\/)[^\\\/]*?(\\|\/)\.\./, "");
+            fullpath = fullpath.replace(/(\\|\/)[^\\\/]*?(\\|\/)\.\./, "");
+            fullpath = fullpath.replace(/(\\|\/)[^\\\/]*?(\\|\/)\.\./, "");
             Config.logger.log('Revealing folder ' + args.fullpath + " :: " + fullpath);
             vscode.commands.executeCommand('revealFileInOS', Uri.file(fullpath));
+        }));
+
+        context.subscriptions.push(vscode.commands.registerCommand('ex-explorer.addfile', async (args) => {
+            const name: string | undefined = await window.showInputBox();
+            if (!name || !name!.trim()) {
+                return;
+            }
+            const file_path = path.join(args.fullpath, name!);
+            fs.openSync(file_path, 'a');
+            ViewProviders.explorerViewProvider.refreshUI();
+            await open_file(file_path);
+        }));
+
+        context.subscriptions.push(vscode.commands.registerCommand('ex-explorer.addfolder', async (args) => {
+            const name: string | undefined = await window.showInputBox();
+            if (!name || !name!.trim()) {
+                return;
+            }
+            const file_path = path.join(args.fullpath, name!);
+            fs.mkdirSync(file_path);
+            ViewProviders.explorerViewProvider.refreshUI();
+        }));
+
+        context.subscriptions.push(vscode.commands.registerCommand('ex-explorer.renamefile', async (args: ExplorerFileItem) => {
+            const parseUrl = path.parse(args.fullpath);
+            const name: string | undefined = await window.showInputBox({ value: parseUrl.name + parseUrl.ext });
+            if (!name || !name!.trim()) {
+                return;
+            }
+            const new_path = path.join(parseUrl.dir, name!);
+            fs.renameSync(args.fullpath, new_path);
+            ViewProviders.explorerViewProvider.refreshUI();
         }));
     }
 
